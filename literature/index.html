@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="icon" type="image/x-icon" href="../favicon.ico">
+	<title>Mintverse</title>
+	<meta property="og:image" content="../cover.png"/>
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;600&family=Noto+Sans+TC:wght@300;400;500;700&display=swap" rel="stylesheet">
+	<link rel="stylesheet" href="../css/_reset.css">
+	<link rel="stylesheet" href="../css/header.css">
+	<link rel="stylesheet" href="../css/footer.css">
+	<link rel="stylesheet" href="../css/literature.css">
+	<link rel="stylesheet" href="../css/article.css">
+	<link rel="stylesheet" href="../css/loading-bar.css">
+	<script src="../js/jquery-3.6.0.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/jquery.marquee@1.6.0/jquery.marquee.min.js"></script>
+	<script src="../js/header.js"></script>
+	<script src="../js/footer.js"></script>
+	<script src="../js/loading-bar.min.js"></script>
+	<style>
+		#myProgress {
+		  width: 60%;
+		  background-color: #fff;
+		  position: absolute;
+	    left: 50%;
+	    top: 50%;
+	    transform: translate(-50%, -50%);
+	    border-radius: 100px;
+	    overflow: hidden;
+		}
+
+		#myBar {
+		  width: 0%;
+		  height: 25px;
+		  background-color: var(--main-color);
+		  text-align: center;
+		  line-height: 25px;
+		  color: #fff;
+		  transition: all 1s ease;
+		  font-size: 14px;
+		  align-items: center;
+    		justify-content: center;
+		}
+	</style>
+</head>
+<body>
+	<div id="app">
+		<header>
+		</header>
+		<section class="literature">
+			<h3>鑄造小組發現了人類僅存的十篇文獻，然而文獻中的詞彙盡皆散佚，等待各位注入定義後解鎖。</h3>
+			<div class="cardContainer">
+			</div>
+		</section>
+		<section class="article">
+			<div class="back pointer"><img src="../image/back.svg" alt=""> 返回</div>
+			<h1 class="title"></h1>
+			<h3 class="author"></h3>
+			<button style="cursor:pointer;"><img src="../image/back_orange.svg" alt="">其他的可能宇宙</button>
+			<p class="content"></p>
+			<div class="goTop"><img src="../image/back.svg" alt="">TOP</div>
+		</section>
+		<div class="message">
+			<div class="word">
+				<a href=""  target="_blank" ><img src="../image/opensea.png" alt=""></a>
+				<p></p>
+			</div>
+			<div class="context"></div>
+		</div>
+		
+		<footer>
+		</footer>
+	</div>
+	<div id="myProgress">
+		 <div id="myBar">10%</div>
+	</div>
+	<script>
+		$(document).ready(async function() {
+			let authorData = []
+			let articleDetail;
+			let articleId = null;
+			let elem = document.getElementById("myBar");
+    		let width = 0;
+			const SearchURL = new URL(window.location.href);
+			let params = SearchURL.searchParams;
+			$('header').setHeader();
+			$('footer').setFooter();
+			checkParams();
+			async function checkParams (status) {
+				if(!status){
+					$('.title').empty();
+					$('.author').empty();
+				}
+				$('.content').empty();
+				if(params.has('article')){
+					$('#myBar').show();
+					$('.literature').hide();
+					$('.article').show();
+					articleId = params.get('article');
+					$('#app').addClass('articlePage');
+					width = 20;
+					await getDetailArticle();
+					width = 100;
+					elem.style.width = width + "%";
+					elem.innerHTML = width  + "%";
+					let timer = setTimeout(function(){
+						$('#myBar').hide();
+						renderArticle(status);
+						clearTimeout(timer);
+					},500);
+				}else{
+					$('.literature').show();
+					$('.article').hide();
+					init();
+				}
+			}
+
+			$('.message').on('click', function(event) {
+				//event.preventDefault();
+				/* Act on the event */
+				console.log(event)
+				$('.message').hide();
+			});
+			$('.article button').on('click', function(){
+				$('#myProgress').hide();
+				checkParams('changeContext');
+				replaceContext();
+			});
+			async function getDetailArticle(){
+				let endpoint;
+				width = 50;
+				elem.style.width = width + "%";
+				elem.innerHTML = width  + "%";
+				endpoint = `https://api2.mintverse.world/api/mintverse/author/${articleId}`
+				let data = await $.ajax({
+			  		type: "GET",
+				    url: endpoint,
+				    dataType: "json",
+				    success: function (response) {
+				    	//id article article_title name written_percentage reserved_tokens
+				    	articleDetail = response.author;
+						if(articleDetail.written_percentage * 100 < 75){
+							alert("此文章尚未解鎖");
+							location.href = '/literature';
+						}
+				    	width = 80;
+				    	elem.style.width = width + "%";
+						elem.innerHTML = width  + "%";
+				    },
+				    error: function (thrownError) {
+				      	console.log(thrownError);
+				    }
+			  	})
+				
+			}
+			async function init(){
+				let endpoint;
+    			width = 10;
+				/* ldBar stored in the element */
+				for (var i = 0; i < 11; i++) {
+					if(i != 1){;
+						endpoint = `https://api2.mintverse.world/api/mintverse/author/${i}`
+						let data = await $.ajax({
+					  		type: "GET",
+						    url: endpoint,
+						    dataType: "json",
+						    success: function (response) {
+						    	//id article article_title name written_percentage reserved_tokens
+						    	let json = response.author;
+						    	json.written_percentage = Math.floor(json.written_percentage*100);
+						    	if(json.written_percentage>=100)json.written_percentage = 100;
+						    	json.written_percentage = 100;
+						      	authorData.push(json)
+						      	if (width >= 100) {
+							        $('#myBar').hide();
+							    } else {
+							      width += 10;
+							      elem.style.width = width + "%";
+							      elem.innerHTML = width  + "%";
+							    }
+							    if(i==10){
+							    	$('#myBar').hide();
+							    }
+						    },
+						    error: function (thrownError) {
+						      	console.log(thrownError);
+						    }
+					  	})
+					}
+				}
+				$('#myBar').hide();
+				authorData.sort(function(a, b) {
+			    	return b.written_percentage - a.written_percentage;
+				});
+				authorData.forEach( function(item, index){
+					let persentCheck = item.written_percentage >= 75 ? true : false;
+					let title = item.article_title;
+					let author = item.name;
+					if( author == '李屏瑤'){
+						title = insertStr(title, 3 , '<br>')
+					}
+					if( author == '黃麗群'){
+						title = insertStr(title, 8 , '<br>');
+						title = insertStr(title, title.length - 5 , '<br>');
+					}
+					$('.cardContainer').append(`<div class="card"><div class="info"><h3>${title}</h3><p>作家 ${author}</p></div><h2><span>${'解鎖完成'}</span></h2></div>`)
+					if(!persentCheck){
+						$('.card').eq(index) .addClass('lock');
+					}else{
+						$('.card').eq(index) .addClass('unlock');
+					}
+					if(author == '李屏瑤'){
+						$('.card').eq(index) .addClass('li');
+					}
+					if(author == '黃麗群'){
+						$('.card').eq(index) .addClass('haung');
+					}
+					
+				})
+				initClick();
+			}
+			function replaceContext(){
+				let replacArticle;
+				$('.article .content').empty();
+				replacArticle = replaceKeyWord(articleId, 1);
+				$('.article .content').append(replacArticle);
+				bindContentEvent();
+			}
+			function renderArticle(status){
+				let replacArticle
+				replacArticle = replaceKeyWord(articleId, 0);
+				if(!status){
+					$('.article .title').append(articleDetail.article_title);
+					$('.article .author').append('作家'+' '+articleDetail.name);
+				}
+				$('.article .content').append(replacArticle);
+				bindContentEvent();
+			}
+			String.prototype.replaceAt = function(index, replacement) {
+			    return this.substring(0, index) + replacement + this.substring(index + replacement.length);
+			}
+			function replaceKeyWord(id, status){
+				let data = articleDetail
+				let article;
+				if(status == 0){
+					for (var i = 0; i < articleDetail.reserved_tokens.length; i++) {
+						if(articleDetail.reserved_tokens[i].status == 2){
+							//if(articleDetail.reserved_tokens[i].id == 1274){
+								let keyword = articleDetail.reserved_tokens[i]
+								if(keyword.word.word == '詩'){
+									for (let index = 0; index < data.article.length; index++) {
+									  if (data.article[index] === '詩' && data.article[index + 1] != '人') {
+										article = data.article.replaceAt(index, `<span data-discript="${i}" data-url="${keyword.opensea_url}">${keyword.word.word}</span>`);
+									  }
+									}
+								}else{
+									article = data.article.replaceAll(keyword.word.word, `<span data-discript="${i}" data-url="${keyword.opensea_url}">${keyword.word.word}</span>`);
+								}
+								data.article = article;
+							//}
+						}
+					}
+				}else{
+					for (var i = 0; i < articleDetail.reserved_tokens.length; i++) {
+						if(articleDetail.reserved_tokens[i].status == 2){
+							let keyword = articleDetail.reserved_tokens[i];
+							let num = keyword.word.synonyms == null || keyword.word.synonyms.length == 0 ? 0 : getRandom(keyword.word.synonyms.length);
+							//if(keyword.word.word == '詩'){
+							// 	for (let index = 0; index < $('.article .content').html().length; index++) {
+							// 	  if ($('.article .content').html()[index] === '詩' && $('.article .content').html()[index + 1] != '人') {
+							// 		article = $('.article .content').html().replaceAt(index, `${keyword.word.synonyms[num]}`);
+							// 	  }
+							// 	}
+							// }else{
+								article = data.article.replaceAll(keyword.word.word, `${keyword.word.synonyms[num]}`)
+							//}
+							data.article = article;
+						}
+					}
+				}
+				return article;
+			}
+			function initClick(){
+				$('.card').off();
+				$('.card').on('click', function(event) {
+					event.preventDefault();
+					/* Act on the event */
+					let index = $( ".card" ).index( this );
+					if(authorData[index].written_percentage < 75) return;
+					location.href = location.href + '?article=' + authorData[index].id
+				});
+			}
+			function bindContentEvent(){
+				$('.content span').off();
+				$('.content span').on('click', function(event) {
+					event.preventDefault();
+					console.log(event.currentTarget.innerHtml)
+					//event.currentTarget.attributes['data-url'].value
+					$('.message .word p').text(event.currentTarget.innerHTML);
+					$('.message .context').text(articleDetail.reserved_tokens[event.currentTarget.attributes['data-discript'].value].word.context);
+					$('.message .word a').attr("href", event.currentTarget.attributes['data-url'].value);
+					$('.message').show(400);
+					$('.message').css('display', 'flex');
+				});
+			}
+			$('.back').on('click', function(event) {
+				event.preventDefault();
+				/* Act on the event */
+				location.href = '/literature'
+			});
+			$('.goTop').on('click', function(event) {
+				event.preventDefault();
+				/* Act on the event */
+				$('html, body').animate({scrollTop : 0},800);
+				return false;
+			});
+			function insertStr(soure,start, newStr) {
+  				return soure.slice(0, start) + newStr + soure.slice(start)
+			}
+			function getRandom(x){
+			    return Math.floor(Math.random()*x);
+			};
+		})
+	</script>
+</body>
+</html>

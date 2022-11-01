@@ -1,0 +1,375 @@
+:root {
+  --main-color: #FF0000;
+}
+
+*{
+	font-family: 'Noto Sans TC', sans-serif;
+	color: #FF0000;
+	scroll-behavior: smooth;
+}
+body{
+	height: 100%;
+}
+a{
+	text-decoration: none;
+}
+
+/*::-webkit-scrollbar {
+
+  width: 7px;
+
+}*/
+
+::-webkit-scrollbar-button {
+
+  background: #FF0000;
+
+  border-radius: 4px;
+
+}
+
+::-webkit-scrollbar-track-piece {
+
+  background: #FF0000;
+
+}
+
+::-webkit-scrollbar-thumb {
+
+  border-radius: 4px;
+
+  background-color: rgba(0, 0, 0, 0.4);
+
+}
+
+::-webkit-scrollbar-track {
+
+  box-shadow: transparent;
+
+}
+
+
+.pointer{
+	cursor: pointer;
+}
+a{
+	text-decoration: none;
+}
+
+#app{
+	background-color: black;
+	min-height: 100vh;
+	position: relative;
+	font-size: 0;
+	/*overflow: hidden;*/
+	display: flex; 
+ 	flex-direction: column;
+}
+section{
+	flex-grow: 1; 
+}
+.literature{
+		min-height: 30vh;
+		margin: 0 auto;
+		flex-grow: 1;
+		flex-grow: 1;
+		padding: 80px 20px;
+}
+.literature h3{
+	font-size: 22px;
+	font-weight: bold;
+	line-height: 1.4em;
+	max-width: 465px;
+	margin: 0 auto 50px;
+}
+.cardContainer{
+		padding: 80px 0px;
+		display: flex;
+		flex-wrap: wrap;
+		max-width: 375px;
+		margin: 0 auto;
+		justify-content: space-between;
+}
+.cardContainer .card.lock{
+	opacity: 0.3;
+	cursor: inherit;
+}
+.cardContainer .card.lock h2 span:nth-of-type(2){
+	display: none;
+}
+.cardContainer .card{
+	border: 1px solid var(--main-color);
+	text-align: center;
+	width: 46%;
+	margin-bottom: 30px;
+	margin-right: 18px;
+	background-color: var(--main-color);
+	position: relative;
+	cursor: pointer;
+}
+.cardContainer .card:nth-of-type(2n){
+	margin-right: 0;
+}
+.cardContainer .card.lock:before{
+	content: '';
+	background-image: url(../image/lock.svg);
+	background-size: cover;
+	display: inline-block;
+	width: 13px;
+	padding-bottom: 10%;
+	position: absolute;
+	left: 10px;
+	top: 10px;
+}
+.cardContainer .info{
+	color: var(--main-color);
+	padding:20px 0;
+	background-color: black;
+	display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+}
+.cardContainer .info h3{
+	font-size: 21px;
+	margin-bottom: 20px;
+	line-height: 1.2;
+	font-weight: bold;
+	color: var(--main-color);
+}
+.cardContainer .haung .info{
+	padding:6px 0 20px;
+}
+.cardContainer .li .info {
+	padding: 8px 0 18px;
+}
+.cardContainer .haung .info h3{
+	font-size: 12px;
+	margin-bottom: 0px;
+}
+@media(max-width: 375px){
+	.cardContainer .haung .info h3{
+		margin-bottom: -3px;
+	}
+}
+.cardContainer .li .info h3{
+	margin-bottom: 10px;
+}
+.cardContainer .info p{
+	font-size: 16px;
+	color: var(--main-color);
+}
+.cardContainer h2{
+	font-size: 40px;
+	text-align: center;
+	background-color: var(--main-color);
+	color: #fff;
+	font-weight: bold;
+  letter-spacing: 0.1em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  padding: 5px 0 8px;
+  line-height: 1.5;
+}
+.cardContainer span{
+	font-size: 30px;
+	text-align: center;
+	color: #fff;
+	font-weight: bold;
+	display: block;
+	line-height: 1.3;
+	width: 100%;
+}
+.cardContainer span:nth-of-type(2){
+	font-size: 20px;
+}
+.cardContainer .card.lock h2 span{
+	font-size: 50px;
+}
+.message {
+	  position: fixed;
+    bottom: 3%;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: var(--main-color);
+    height: 85px;
+    width: 95%;
+    box-sizing: border-box;
+    padding: 18px 10px;
+    /*display: flex;*/
+    max-width: 310px;
+    display: none;
+}
+.message .word {
+	  width: 30%;
+    display: flex;
+    align-items: center;
+    border-right: 2px solid black;
+}
+.message .word img{
+	width: 23px;
+  align-self: center;
+}
+.message .word p, .message .context{
+	  color: black;
+    font-size: 12px;
+    font-weight: bold;
+}
+.message .context{
+	padding: 5px 0px 5px 15px;
+	width: 70%;
+	overflow: scroll;
+	line-height: 1.25;
+}
+.literature button{
+	background-color: var(--main-color);
+	width: 80%;
+	margin: 0 auto;
+	border: 2px solid var(--main-color);
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	font-size: 20px;
+	border-radius: 100px;
+	color: black;
+	font-weight: bold;
+	line-height: 1.5;
+	margin-bottom: -10px;
+	max-width: 293px;
+	cursor: pointer;
+}
+
+@media (min-width: 576px){
+	.message{
+		  max-width: 500px;
+		  height: 105px;
+	}
+	.message .word img{
+		width: 36px;
+	}
+	.literature button{
+		margin-bottom: -10px;
+	}
+	.message .word p, .message .context{
+		font-size: 15px;
+	}
+
+}
+@media (min-width: 768px){
+	.literature h3{
+			max-width: 626px;
+	}
+	.cardContainer{
+		max-width: 597px;
+	}
+	.cardContainer .info{
+		padding: 24px 0;
+	}
+	.cardContainer .info h3 {
+		font-size: 24px;
+	}
+	.cardContainer .li .info h3{ 
+		margin-bottom: 8px;
+	}
+	.cardContainer .li .info{
+		 padding: 6px 0 25px;
+	}
+	.cardContainer .haung .info h3{
+		  margin-bottom: 10px;
+	}
+	.cardContainer .info p {
+		font-size: 18px;
+	}
+	.cardContainer .haung .info{
+		padding:18px 0 25px;
+	}
+	.cardContainer .card{
+		width: 177px;
+		margin-right: 30px;
+		margin-bottom: 50px;
+	}
+
+	.cardContainer .card:nth-of-type(2n){
+		margin-right: 30px;
+	}
+	.cardContainer .card:nth-of-type(3n){
+		margin-right: 0px;
+	}
+	.articlePage footer{
+		position: relative;
+	}
+	.message{
+		bottom: 20%;
+	}
+	.literature button{
+		margin: 0 auto 0px auto;
+	}
+}
+@media (min-width: 1200px){
+	.literature h3{
+			max-width: 806px;
+			font-size: 24px;
+	}
+	.cardContainer{
+		max-width: 806px;
+		justify-content: flex-start;
+	}
+	/*.cardContainer .card{
+		width: 171px;
+	}
+	.cardContainer .info{
+		padding: 30px 0; 
+	}
+	.cardContainer .info h3{
+		font-size: 24px;
+	}
+	.cardContainer .info p{
+		font-size: 18px;
+	}*/
+	.cardContainer .card:nth-of-type(2n), .cardContainer .card:nth-of-type(3n){
+		margin-right: 30px;
+	}
+	.cardContainer .card:nth-of-type(4n){
+		margin-right: 0px;
+	}
+	.cardContainer .card h2{
+		font-size: 32px;
+		height: 79px;
+	}
+	.cardContainer .card.lock h2{
+		font-size: 46px;
+	}
+	.literature button{
+		margin: 0 auto -20px auto
+	}
+}
+@media (min-width: 1440px){
+	.cardContainer{
+		max-width: 1020px;
+	}
+	.literature h3{
+		max-width: 1023px;
+	}
+	.cardContainer .card:nth-of-type(2n), .cardContainer .card:nth-of-type(3n), .cardContainer .card:nth-of-type(4n){
+		margin-right: 30px;
+	}
+	.cardContainer .card:nth-of-type(5n){
+		margin-right: 0px;
+	}
+	.cardContainer .card h2{
+		font-size: 32px;
+		height: 79px;
+	}
+	.cardContainer .card.lock h2{
+		font-size: 46px;
+	}
+	.message .word p, .message .context{
+		font-size: 17px;
+	}
+	.literature button{
+		margin: 0 auto -20px auto
+	}
+
+}

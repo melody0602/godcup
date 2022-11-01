@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Mintverse</title>
+	<meta name="description" content="每一個詞彙，都收藏了世界的一個部分。一群詞彙交織起來，就是一個完整的宇宙。"/>
+	<meta property="og:title" content="Mintverse" />
+	<meta property="og:description" content="每一個詞彙，都收藏了世界的一個部分。一群詞彙交織起來，就是一個完整的宇宙。" />
+	<meta property="og:image" content="../cover.png"/>
+	<link rel="icon" type="image/x-icon" href="../favicon.ico">
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;600&family=Noto+Sans+TC:wght@300;400;500;700&display=swap" rel="stylesheet">
+	<link rel="stylesheet" href="../css/_reset.css">
+	<link rel="stylesheet" href="../css/header.css">
+	<link rel="stylesheet" href="../css/footer.css">
+	<link rel="stylesheet" href="../css/prove.css">
+	<link rel="stylesheet" href="../css/es.css">
+	<script src="../js/jquery-3.6.0.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/jquery.marquee@1.6.0/jquery.marquee.min.js"></script>
+	<script src="../js/header.js"></script>
+	<script src="../js/footer.js"></script>
+	<script src="../js/pop.js"></script>
+	<link rel="stylesheet" href="../css/pop.css">
+</head>
+<body>
+	<div id="app">
+		<header>
+		</header>
+		<section class="prove">
+			<h1>僅剩四百餘人的拉阿魯哇族</h1>
+			<p>
+				Hla’alua，拉阿魯哇族，過去稱沙阿魯哇，以往被政府官方錯誤歸類與卡那卡那富族合稱為「南鄒」，於2014年6月26日正名為獨立族群。主要居住在臺灣高雄市桃源區、那瑪夏區，人口約四百餘人，過去由排剪社（Paiciana）、美瓏社（Vilanganʉ）、雁爾社（Hlihlala）、塔蠟袷社(（Talicia）組成，故古稱「四社番」或「四社生番」，塔蠟袷社(（Talicia）約於日治時期解散，現在以那瑪夏區瑪雅里的那爾瓦社(Na’ʉv ʉana)取代。
+			</p>
+			<h1>十二聖貝 Takiiarʉ</h1>
+			<p>
+				相傳很久以前拉阿魯哇人與小矮人（kavurua）曾經同住在日昇之地（Hlasʉnga），而貝神（Takiiarʉ）是小矮人的守護神。小矮人與拉阿魯哇族人相處非常的融合，但為了幫下一代找更好的地方居住，阿魯哇的祖先決定離開Hlasʉnga，於是排剪、塔蠟袷和雁爾等三個部落的族人開始遷出Hlasʉnga，而最後離開的是美瓏的族人。當美瓏的族人要離開時，小矮人依依不捨地把他們最珍貴的聖貝（Takiiarʉ）交給族人，要他們好好保管並且定時祭拜，這樣子貝神就會庇佑他們。從此以後，從美瓏社開始，拉阿魯哇族就有了聖貝祭的祭典。（聖貝祭原為二到三年舉辦一次，但近代為了文化的傳承改為每年舉行。）
+				<br>
+				<br>
+				聖貝為拉阿魯哇族重要信仰與精神象徵，十二聖貝分別為勇猛神、驅懶神、狩獵神、狀元神、健康神、守護神、食物神、聰明神、驅魔神、風雨神、勤勞神與平安神。在祭儀中，主祭拋給男子爭奪，只要搶到其中一枚，代表整年將會受祂的祝福。
+			</p>
+			<h1>耆老的聲音</h1>
+			<p>
+				本次計畫特別感謝拉阿魯哇族耆老 Amalanamahlʉ  salapuana (游仁貴) 用聲音紀錄寶貴的族語。（臉書粉專：高雄市拉阿魯哇文教協進會）
+			</p>
+			<div class="hlaalua_img">
+				<img src="../image/hlaalua.jpg" alt="hlaalua">
+			</div>
+		</section>
+		<footer>
+		</footer>
+	</div>
+	<script>
+		$(document).ready(function() {
+			$('header').setHeader();
+			$('footer').setFooter();
+			$('.popset').setPop()
+			let serchData = [];
+
+			// serchData.forEach(function(item){
+			// 	$('.result').empty();
+			// 	$('.result').append(`<img src=${item}>`)
+			// })
+			initData();
+			$('.searchInput span').on('click', function(event) {
+				event.preventDefault();
+				/* Act on the event */
+				search($('input').val());
+			});
+			$( "input" ).keypress(function( event ) {
+			  if ( event.which == 13 ) {
+			     event.preventDefault();
+			     search($('input').val());
+			  }
+			});
+			function initData(){
+				
+				for (var i = 0; i < 30; i++) {
+					let jsonData = {}
+					jsonData.link = `#`;
+					if(i==29)i+=9;
+					jsonData.gif_url = `https://mintverse.s3.ap-northeast-1.amazonaws.com/gif_defined_${3800+i}.gif`;
+					serchData.push(jsonData)
+				}
+				
+				renderGif();
+
+			}
+			function renderGif(){
+				$('.result a').remove();
+				$('.result h1').hide();
+				serchData.forEach(function(item){
+					if(item.gif_url == null)return;
+					let gif = item.gif_url;
+					//gif = '../image/sample.gif'
+					$('.result').append(`<a href="${item.link}"><img src='${gif}''></a>`)
+				})
+			}
+			async function search(key){
+				if($.trim($('input').val()).length == 0){
+					$('.popset').openPop({message:'請輸入詞彙關鍵字'});
+					return;
+				}
+				$('.result a').remove();
+				$('.result h1').hide();
+				let endpoint = `https://api2.mintverse.world/api/mintverse/token/search`;
+				let data = await $.ajax({
+			  		type: "POST",
+				    url: endpoint,
+				    dataType: "json",
+				    contentType:'application/json;charset=utf-8',
+				    data:JSON.stringify({
+					  "keyword": key,
+					  "token_category": 2
+					}),
+				    success: function (response) {
+				      	serchData = response.results;
+				    },
+				    error: function (thrownError) {
+				      	console.log(thrownError);
+				    }
+			  	})
+			  	if(serchData.length == 0)
+			  		$('.result h1').show();
+			  	else
+			  		renderGif();
+			}
+		})
+	</script>
+</body>
+</html>

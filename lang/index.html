@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Mintverse</title>
+	<meta name="description" content="每一個詞彙，都收藏了世界的一個部分。一群詞彙交織起來，就是一個完整的宇宙。"/>
+	<meta property="og:title" content="Mintverse" />
+	<meta property="og:description" content="每一個詞彙，都收藏了世界的一個部分。一群詞彙交織起來，就是一個完整的宇宙。" />
+	<meta property="og:image" content="../cover.png"/>
+	<link rel="icon" type="image/x-icon" href="../favicon.ico">
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;600&family=Noto+Sans+TC:wght@300;400;500;700&display=swap" rel="stylesheet">
+	<link rel="stylesheet" href="../css/_reset.css">
+	<link rel="stylesheet" href="../css/header.css">
+	<link rel="stylesheet" href="../css/footer.css">
+	<link rel="stylesheet" href="../css/prove.css">
+	<link rel="stylesheet" href="../css/es.css">
+	<script src="../js/jquery-3.6.0.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/jquery.marquee@1.6.0/jquery.marquee.min.js"></script>
+	<script src="../js/header.js"></script>
+	<script src="../js/footer.js"></script>
+	<script src="../js/pop.js"></script>
+	<link rel="stylesheet" href="../css/pop.css">
+</head>
+<body>
+	<div id="app">
+		<header>
+		</header>
+		<section class="prove">
+			<h1>瀕危的母語</h1>
+			<p>
+				瀕危語言（endangered language）指的是使用人數越來越少的、行將滅絕的語言。根據聯合國教科文組織公布資料，台灣有5種原住民語言評為極度危險，9種語言被列為脆弱等級，更有16族語言已部分瀕臨滅絕。
+				<br><br>
+				瀕危語言（endangered language）指的是使用人數越來越少的、行將滅絕的語言。根據聯合國教科文組織公布資料，台灣有5種原住民語言評為極度危險，9種語言被列為脆弱等級，更有16族語言已部分瀕臨滅絕。
+				<br><br>
+				瀕危語言（endangered language）指的是使用人數越來越少的、行將滅絕的語言。根據聯合國教科文組織公布資料，台灣有5種原住民語言評為極度危險，9種語言被列為脆弱等級，更有16族語言已部分瀕臨滅絕。
+			</p>
+			<h1>臺灣原住民瀕危母語</h1>
+			<p>
+				阿美族 人口數 217,060
+				<br>
+				泰雅族 人口數 93,902
+				<br>
+				排灣族	人口數 104,757
+				<br>
+				布農族 人口數 60,740
+				<br>
+				魯凱族 人口數 13,623
+				<br>
+				卑南族 人口數 14,975
+				<br>
+				鄒族 人口數 6,718
+				<br>
+				賽夏族 人口數 6,813
+				<br>
+				雅美族 人口數 4,804
+				<br>
+				邵族 人口數 823
+				<br>
+				噶瑪蘭族 人口數 1,559
+				<br>
+				太魯閣族 人口數 33,322
+				<br>
+				撒奇萊雅族 人口數 1,047
+				<br>
+				賽德克族族 人口數 10,851
+				<br>
+				<b>拉阿魯哇族 人口數 446</b>
+				<br>
+				卡那卡那富族 人口數 390
+			</p>
+		</section>
+		<footer>
+		</footer>
+	</div>
+	<script>
+		$(document).ready(function() {
+			$('header').setHeader();
+			$('footer').setFooter();
+			$('.popset').setPop()
+			let serchData = [];
+
+			// serchData.forEach(function(item){
+			// 	$('.result').empty();
+			// 	$('.result').append(`<img src=${item}>`)
+			// })
+			initData();
+			$('.searchInput span').on('click', function(event) {
+				event.preventDefault();
+				/* Act on the event */
+				search($('input').val());
+			});
+			$( "input" ).keypress(function( event ) {
+			  if ( event.which == 13 ) {
+			     event.preventDefault();
+			     search($('input').val());
+			  }
+			});
+			function initData(){
+				
+				for (var i = 0; i < 30; i++) {
+					let jsonData = {}
+					jsonData.link = `#`;
+					if(i==29)i+=9;
+					jsonData.gif_url = `https://mintverse.s3.ap-northeast-1.amazonaws.com/gif_defined_${3800+i}.gif`;
+					serchData.push(jsonData)
+				}
+				
+				renderGif();
+
+			}
+			function renderGif(){
+				$('.result a').remove();
+				$('.result h1').hide();
+				serchData.forEach(function(item){
+					if(item.gif_url == null)return;
+					let gif = item.gif_url;
+					//gif = '../image/sample.gif'
+					$('.result').append(`<a href="${item.link}"><img src='${gif}''></a>`)
+				})
+			}
+			async function search(key){
+				if($.trim($('input').val()).length == 0){
+					$('.popset').openPop({message:'請輸入詞彙關鍵字'});
+					return;
+				}
+				$('.result a').remove();
+				$('.result h1').hide();
+				let endpoint = `https://api2.mintverse.world/api/mintverse/token/search`;
+				let data = await $.ajax({
+			  		type: "POST",
+				    url: endpoint,
+				    dataType: "json",
+				    contentType:'application/json;charset=utf-8',
+				    data:JSON.stringify({
+					  "keyword": key,
+					  "token_category": 2
+					}),
+				    success: function (response) {
+				      	serchData = response.results;
+				    },
+				    error: function (thrownError) {
+				      	console.log(thrownError);
+				    }
+			  	})
+			  	if(serchData.length == 0)
+			  		$('.result h1').show();
+			  	else
+			  		renderGif();
+			}
+		})
+	</script>
+</body>
+</html>
